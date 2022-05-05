@@ -1,5 +1,6 @@
 {
     "name": "Free Throw",
+    "version": "1.0.0",
     "description": "",
     "dependencies": {
         "device": "*"
