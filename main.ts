@@ -67,6 +67,19 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
             music.playMelody("G F C G F C C5 C5 ", 274)
         }
     }
+    animation.runMovementAnimation(
+    mySprite,
+    animation.animationPresets(animation.bobbing),
+    2000,
+    false
+    )
+    game.showLongText("Rapid fire!!", DialogLayout.Bottom)
+    animation.runImageAnimation(
+    mySprite,
+    assets.animation`Movement`,
+    200,
+    true
+    )
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Hoop, function (sprite, otherSprite) {
     mySprite2.startEffect(effects.halo, 200)
@@ -89,22 +102,23 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Hoop, function (sprite, othe
         projectile.vy += 10
         mySprite.vx += 5
     }
-    if (info.score() == 100) {
+    if (info.score() >= 100) {
         game.over(true, effects.confetti)
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     projectile = sprites.createProjectileFromSprite(assets.image`Basketball`, mySprite, 0, -100)
+    music.footstep.play()
     projectile.setFlag(SpriteFlag.DestroyOnWall, true)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Backboard, function (sprite, otherSprite) {
-    mySprite.setStayInScreen(true)
+    projectile.setStayInScreen(true)
     projectile.setBounceOnWall(true)
     sprites.destroyAllSpritesOfKind(SpriteKind.Projectile, effects.trail, 3300)
     music.knock.play()
+    scene.cameraShake(4, 100)
     projectile.ay += 125
-    projectile.ax += 35
-    mySprite.vx += 1
+    projectile.ax += 65
 })
 let projectile: Sprite = null
 let mySprite2: Sprite = null
@@ -114,6 +128,12 @@ mySprite = sprites.create(assets.image`Player 1`, SpriteKind.Player)
 mySprite.setVelocity(50, 0)
 mySprite.setPosition(77, 62)
 mySprite.setBounceOnWall(true)
+animation.runImageAnimation(
+mySprite,
+assets.animation`Movement`,
+200,
+true
+)
 let mySprite3 = sprites.create(assets.image`Backboard`, SpriteKind.Backboard)
 mySprite3.setPosition(77, 7)
 mySprite2 = sprites.create(assets.image`Hoop`, SpriteKind.Hoop)
