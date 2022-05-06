@@ -4,7 +4,10 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "darts": "*"
+        "darts": "*",
+        "Timers": "github:microsoft/arcade-timers#v1.1.0",
+        "controller": "*",
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1"
     },
     "files": [
         "main.blocks",
@@ -27,5 +30,5 @@
     "supportedTargets": [
         "arcade"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "pyprj"
 }
