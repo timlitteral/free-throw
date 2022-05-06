@@ -20,7 +20,7 @@ def on_b_pressed():
             450,
             False)
         statusbar.value += -100
-    timer.throttle("action", 15000, on_throttle)
+    timer.throttle("action", 12000, on_throttle)
     
 controller.B.on_event(ControllerButtonEvent.PRESSED, on_b_pressed)
 
@@ -36,7 +36,7 @@ def on_on_overlap(sprite, otherSprite):
         mySprite2.start_effect(effects.ashes, 5000)
         mySprite.vx += 10
     if info.player1.score() > 90:
-        mySprite2.start_effect(effects.disintegrate, 6500)
+        mySprite2.start_effect(effects.warm_radial, 6500)
         music.spooky.play()
         projectile.vy += 10
         mySprite.vx += 10
@@ -52,16 +52,6 @@ def on_a_released():
     music.footstep.play()
     projectile.set_flag(SpriteFlag.DESTROY_ON_WALL, True)
 controller.A.on_event(ControllerButtonEvent.RELEASED, on_a_released)
-
-def on_on_overlap2(sprite2, otherSprite2):
-    projectile.set_stay_in_screen(True)
-    projectile.set_bounce_on_wall(True)
-    sprites.destroy_all_sprites_of_kind(SpriteKind.projectile, effects.trail, 3300)
-    music.knock.play()
-    scene.camera_shake(4, 100)
-    projectile.ay += 125
-    projectile.ax += 65
-sprites.on_overlap(SpriteKind.projectile, SpriteKind.Backboard, on_on_overlap2)
 
 def on_down_pressed():
     mySprite.say_text(":P", 500, True)
@@ -128,6 +118,16 @@ def on_down_pressed():
     """), 200, True)
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
+def on_on_overlap2(sprite2, otherSprite2):
+    projectile.set_stay_in_screen(True)
+    projectile.set_bounce_on_wall(True)
+    sprites.destroy_all_sprites_of_kind(SpriteKind.projectile, effects.trail, 3300)
+    music.knock.play()
+    scene.camera_shake(4, 100)
+    projectile.ay += 125
+    projectile.ax += 65
+sprites.on_overlap(SpriteKind.projectile, SpriteKind.Backboard, on_on_overlap2)
+
 projectile: Sprite = None
 statusbar: StatusBarSprite = None
 mySprite2: Sprite = None
@@ -157,6 +157,30 @@ statusbar.attach_to_sprite(mySprite, -20, 0)
 statusbar.set_status_bar_flag(StatusBarFlag.SMOOTH_TRANSITION, True)
 statusbar.set_color(5, 0)
 statusbar.max = 100
+seconds = 10000
+game.set_dialog_frame(assets.image("""
+    timer
+"""))
+game.set_dialog_cursor(img("""
+    . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . .
+"""))
+game.set_dialog_text_color(2)
+game.show_long_text(seconds, DialogLayout.BOTTOM)
 
 def on_forever():
     pause(500)
