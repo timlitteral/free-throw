@@ -11,6 +11,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         3000,
         false
         )
+        mySprite.startEffect(effects.fire, 1000)
         music.zapped.playUntilDone()
         animation.runImageAnimation(
         mySprite,
@@ -33,16 +34,13 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Hoop, function (sprite, othe
     projectile.destroy()
     info.changeScoreBy(1)
     if (info.player1.score() > 55) {
-        mySprite2.startEffect(effects.fire, 2000)
         mySprite.vx += 10
     }
     if (info.player1.score() > 75) {
-        mySprite2.startEffect(effects.ashes, 5000)
         mySprite.vx += 10
     }
     if (info.player1.score() > 90) {
         mySprite2.startEffect(effects.warmRadial, 6500)
-        music.spooky.play()
         projectile.vy += 10
         mySprite.vx += 10
     }
@@ -53,7 +51,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Hoop, function (sprite, othe
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     projectile = sprites.createProjectileFromSprite(assets.image`Basketball`, mySprite, 0, -100)
     music.footstep.play()
-    projectile.setFlag(SpriteFlag.DestroyOnWall, true)
+    projectile.setFlag(SpriteFlag.AutoDestroy, true)
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     mySprite.sayText(":P", 500, true)
@@ -124,6 +122,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.EQ, statusbars.ComparisonType.Percentage, 100, function (status) {
     music.beamUp.play()
+    statusbar.startEffect(effects.halo, 500)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Backboard, function (sprite2, otherSprite2) {
     projectile.setStayInScreen(true)
@@ -158,28 +157,6 @@ statusbar.attachToSprite(mySprite, -15, 3)
 statusbar.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
 statusbar.setColor(5, 0)
 statusbar.max = 100
-let seconds = 10000
-game.setDialogFrame(assets.image`timer`)
-game.setDialogCursor(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `)
-game.setDialogTextColor(2)
-game.showLongText(seconds, DialogLayout.Bottom)
 forever(function () {
     pause(500)
     statusbar.value += 5
